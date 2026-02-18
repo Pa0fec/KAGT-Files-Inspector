@@ -54,94 +54,7 @@ namespace FilesInspector
             }
         }
 
-        // ====================================================
-        //  FUNCIÓN: Separar la primera columna del archivo DAT
-        // ====================================================
-        private (string PartNumber, string Referencia) ParseDatLine(string line)
-        {
-            if (string.IsNullOrWhiteSpace(line))
-                return (string.Empty, string.Empty);
-
-            // Tomar el primer bloque (ej. 200N103P63637C426)
-            string firstBlock = line
-                .Split(' ', StringSplitOptions.RemoveEmptyEntries)[0]
-                .Trim()
-                .ToUpper();
-
-            if (firstBlock.Length <= 7) // mínimo razonable
-                return (firstBlock, string.Empty);
-
-            // Quitar los primeros 3 caracteres (descartables)
-            string core = firstBlock.Substring(3);
-
-            // Detectar referencia: últimos 4 o 5 caracteres que inician con letra
-            string referencia = string.Empty;
-
-            if (core.Length >= 5 && char.IsLetter(core[^5]))
-            {
-                referencia = core.Substring(core.Length - 5);
-            }
-            else if (core.Length >= 4 && char.IsLetter(core[^4]))
-            {
-                referencia = core.Substring(core.Length - 4);
-            }
-
-            if (string.IsNullOrEmpty(referencia))
-            {
-                // Fallback seguro
-                return (core, string.Empty);
-            }
-
-            // El resto es número de parte
-            string partNumber = core.Substring(0, core.Length - referencia.Length);
-
-            return (partNumber, referencia);
-        }
-
-        private string MapSide(string rawSide)
-        {
-            if (string.IsNullOrWhiteSpace(rawSide))
-                return string.Empty;
-
-            rawSide = rawSide.Trim().ToUpper();
-
-            return rawSide switch
-            {
-                "C" => "SMT_SA",
-                "S" => "SMT_SB",
-                _ => string.Empty
-            };
-        }
-
-        // ====================================================
-        //  FUNCIÓN: Procesar todo el archivo DAT
-        // ====================================================
-        private List<DatRecord> ProcesarDat(string ruta)
-        {
-            var registros = new List<DatRecord>();
-
-            foreach (var line in File.ReadLines(ruta))
-            {
-                if (string.IsNullOrWhiteSpace(line)) continue;
-
-                var cols = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                if (cols.Length < 5) continue;
-
-                string col1 = cols[0];
-                string side = MapSide(cols[4]);
-
-                var (partNumber, referencia) = ParseDatLine(col1);
-
-                registros.Add(new DatRecord
-                {
-                    PartNumber = partNumber,
-                    Referencia = referencia,
-                    Side = side
-                });
-            }
-
-            return registros;
-        }
+       
 
         // ====================================================
         //  FUNCIÓN: Leer BOM (ClosedXML)
@@ -203,7 +116,7 @@ namespace FilesInspector
 
             _comparisonResult = await Task.Run(() =>
             {
-                var datInfo = ProcesarDat(datPath);
+                var datInfo = DatParser.ProcesarDat(datPath);
                 var bomInfo = LeerBOM(bomPath);
 
                 return CompararArchivos(datInfo, bomInfo, pv);
@@ -312,12 +225,6 @@ namespace FilesInspector
         // ====================================================
         //  MODELOS
         // ====================================================
-        public class DatRecord
-        {
-            public string PartNumber { get; set; }
-            public string Referencia { get; set; }
-            public string Side { get; set; }
-        }
 
         public class BomEntry
         {

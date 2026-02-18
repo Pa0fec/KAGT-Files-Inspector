@@ -32,7 +32,7 @@
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
-            bom_generator = new Button();
+            zlist_validation = new Button();
             bom_comparator = new Button();
             program_inspect = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -67,6 +67,7 @@
             label2.Size = new Size(240, 18);
             label2.TabIndex = 2;
             label2.Text = "Manufacturing Validation Tool";
+            label2.Click += label2_Click;
             // 
             // label3
             // 
@@ -78,18 +79,18 @@
             label3.TabIndex = 3;
             label3.Text = "MAIN MENU";
             // 
-            // bom_generator
+            // zlist_validation
             // 
-            bom_generator.BackColor = SystemColors.GradientActiveCaption;
-            bom_generator.Cursor = Cursors.AppStarting;
-            bom_generator.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            bom_generator.Location = new Point(193, 226);
-            bom_generator.Name = "bom_generator";
-            bom_generator.Size = new Size(200, 60);
-            bom_generator.TabIndex = 4;
-            bom_generator.Text = "Generate KAGT BOM";
-            bom_generator.UseVisualStyleBackColor = false;
-            bom_generator.Click += button1_Click;
+            zlist_validation.BackColor = SystemColors.GradientActiveCaption;
+            zlist_validation.Cursor = Cursors.AppStarting;
+            zlist_validation.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            zlist_validation.Location = new Point(193, 226);
+            zlist_validation.Name = "zlist_validation";
+            zlist_validation.Size = new Size(200, 60);
+            zlist_validation.TabIndex = 4;
+            zlist_validation.Text = "Z-LIST Validation";
+            zlist_validation.UseVisualStyleBackColor = false;
+            zlist_validation.Click += zlist_validation_Click;
             // 
             // bom_comparator
             // 
@@ -113,6 +114,7 @@
             program_inspect.TabIndex = 6;
             program_inspect.Text = "Inspect Assembly program";
             program_inspect.UseVisualStyleBackColor = false;
+            program_inspect.Click += program_inspect_Click;
             // 
             // Principal
             // 
@@ -121,7 +123,7 @@
             ClientSize = new Size(579, 512);
             Controls.Add(program_inspect);
             Controls.Add(bom_comparator);
-            Controls.Add(bom_generator);
+            Controls.Add(zlist_validation);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -139,7 +141,7 @@
         private Label label1;
         private Label label2;
         private Label label3;
-        private Button bom_generator;
+        private Button zlist_validation;
         private Button bom_comparator;
         private Button program_inspect;
     }

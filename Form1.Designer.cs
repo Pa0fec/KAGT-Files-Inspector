@@ -57,11 +57,11 @@
             label1.AutoSize = true;
             label1.BackColor = SystemColors.ControlLightLight;
             label1.Font = new Font("Impact", 24F);
-            label1.Location = new Point(237, 35);
+            label1.Location = new Point(318, 34);
             label1.Name = "label1";
-            label1.Size = new Size(461, 48);
+            label1.Size = new Size(294, 48);
             label1.TabIndex = 2;
-            label1.Text = "KAGT DAT–BOM Comparator";
+            label1.Text = "BOM Comparator";
             // 
             // txtDatFile
             // 

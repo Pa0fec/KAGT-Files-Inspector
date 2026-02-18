@@ -15,14 +15,35 @@ namespace FilesInspector
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            
-        }
-
         private void bom_comparator_Click(object sender, EventArgs e)
         {
-            MainView pv = new MainView();
+            OpenForm(new MainView());
+        }
+
+        private void zlist_validation_Click(object sender, EventArgs e)
+        {
+            OpenForm(new Zlist_Validate());
+        }
+
+        private void program_inspect_Click(object sender, EventArgs e)
+        {
+            OpenForm(new Program_Inspect());
+        }
+
+        private void OpenForm(Form form)
+        {
+            form.FormClosed += (s, args) =>
+            {
+                this.Show();
+            };
+
+            form.Show();
+            this.Hide();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
