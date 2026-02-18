@@ -94,26 +94,19 @@ namespace FilesInspector
 
             var csvData = topData.Concat(botData).ToList();
 
-            var diferencias = CompararProgramas(datData, csvData);
+            var comparisonRows = CompararProgramas(datData, csvData);
 
             pv.Close();
 
-            if (diferencias.Count == 0)
-            {
-                MessageBox.Show("No differences found.");
-            }
-            else
-            {
-                MessageBox.Show(string.Join(Environment.NewLine, diferencias));
-            }
+            LoadComparisonResults(comparisonRows);
 
         }
 
-        private List<string> CompararProgramas(
+        private List<ComparisonRow> CompararProgramas(
     List<DatRecord> dat,
     List<DatRecord> csv)
         {
-            var diferencias = new List<string>();
+            var comparisonRows = new List<ComparisonRow>();
 
             // 🔹 Quitar duplicados en DAT
             var datUnico = dat
@@ -129,23 +122,94 @@ namespace FilesInspector
                     g => g.First().PartNumber
                 );
 
+            var processedKeys = new HashSet<(string Referencia, string Side)>();
+
             foreach (var d in datUnico)
             {
-                if (!csvDict.TryGetValue((d.Referencia, d.Side), out var csvPart))
+                var key = (d.Referencia, d.Side);
+                processedKeys.Add(key);
+
+                if (!csvDict.TryGetValue(key, out var csvPart))
                 {
-                    diferencias.Add($"Missing in CSV: {d.Referencia} ({d.Side})");
+                    comparisonRows.Add(new ComparisonRow
+                    {
+                        Reference = d.Referencia,
+                        Side = d.Side,
+                        DatPartNumber = d.PartNumber,
+                        CsvPartNumber = "-",
+                        Status = "Missing in CSV"
+                    });
                     continue;
                 }
 
                 if (!d.PartNumber.Equals(csvPart, StringComparison.OrdinalIgnoreCase))
                 {
-                    diferencias.Add(
-                        $"Part mismatch: {d.Referencia} - DAT:{d.PartNumber} CSV:{csvPart}"
-                    );
+                    comparisonRows.Add(new ComparisonRow
+                    {
+                        Reference = d.Referencia,
+                        Side = d.Side,
+                        DatPartNumber = d.PartNumber,
+                        CsvPartNumber = csvPart,
+                        Status = "Part mismatch"
+                    });
+                }
+                else
+                {
+                    comparisonRows.Add(new ComparisonRow
+                    {
+                        Reference = d.Referencia,
+                        Side = d.Side,
+                        DatPartNumber = d.PartNumber,
+                        CsvPartNumber = csvPart,
+                        Status = "Match"
+                    });
                 }
             }
 
-            return diferencias;
+            foreach (var c in csvDict)
+            {
+                if (processedKeys.Contains(c.Key))
+                {
+                    continue;
+                }
+
+                comparisonRows.Add(new ComparisonRow
+                {
+                    Reference = c.Key.Referencia,
+                    Side = c.Key.Side,
+                    DatPartNumber = "-",
+                    CsvPartNumber = c.Value,
+                    Status = "Missing in DAT"
+                });
+            }
+
+            return comparisonRows
+                .OrderBy(r => r.Status == "Match")
+                .ThenBy(r => r.Reference)
+                .ThenBy(r => r.Side)
+                .ToList();
+        }
+
+        private void LoadComparisonResults(List<ComparisonRow> results)
+        {
+            dgvComparisonResults.AutoGenerateColumns = false;
+            dgvComparisonResults.DataSource = new BindingList<ComparisonRow>(results);
+
+            int total = results.Count;
+            int differences = results.Count(r => !string.Equals(r.Status, "Match", StringComparison.OrdinalIgnoreCase));
+            int matches = total - differences;
+
+            lblResultsSummary.Text =
+                $"Total references: {total}   |   Matches: {matches}   |   Differences: {differences}";
+
+            lblResultsSummary.ForeColor = differences == 0
+                ? Color.FromArgb(0, 120, 0)
+                : Color.FromArgb(170, 60, 0);
+
+            if (differences == 0)
+            {
+                MessageBox.Show("Inspection completed successfully. No differences found.", "Inspection Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

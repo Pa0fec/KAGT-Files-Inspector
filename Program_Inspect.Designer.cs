@@ -41,7 +41,15 @@
             txtbotfile = new TextBox();
             btnSelectBot = new Button();
             btnInspectFiles = new Button();
+            dgvComparisonResults = new DataGridView();
+            colReference = new DataGridViewTextBoxColumn();
+            colSide = new DataGridViewTextBoxColumn();
+            colDatPart = new DataGridViewTextBoxColumn();
+            colCsvPart = new DataGridViewTextBoxColumn();
+            colStatus = new DataGridViewTextBoxColumn();
+            lblResultsSummary = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvComparisonResults).BeginInit();
             SuspendLayout();
             // 
             // pictureBox1
@@ -167,20 +175,94 @@
             btnInspectFiles.BackColor = Color.Green;
             btnInspectFiles.Font = new Font("Consolas", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnInspectFiles.ForeColor = SystemColors.ButtonHighlight;
-            btnInspectFiles.Location = new Point(286, 396);
+            btnInspectFiles.Location = new Point(286, 386);
             btnInspectFiles.Name = "btnInspectFiles";
-            btnInspectFiles.Size = new Size(220, 59);
+            btnInspectFiles.Size = new Size(220, 52);
             btnInspectFiles.TabIndex = 22;
             btnInspectFiles.Text = " Inspect Programs";
             btnInspectFiles.UseVisualStyleBackColor = false;
             btnInspectFiles.Click += btnInspectFiles_Click;
+            // 
+            // dgvComparisonResults
+            // 
+            dgvComparisonResults.AllowUserToAddRows = false;
+            dgvComparisonResults.AllowUserToDeleteRows = false;
+            dgvComparisonResults.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvComparisonResults.BackgroundColor = SystemColors.ControlLightLight;
+            dgvComparisonResults.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvComparisonResults.Columns.AddRange(new DataGridViewColumn[] { colReference, colSide, colDatPart, colCsvPart, colStatus });
+            dgvComparisonResults.Location = new Point(33, 493);
+            dgvComparisonResults.Name = "dgvComparisonResults";
+            dgvComparisonResults.ReadOnly = true;
+            dgvComparisonResults.RowHeadersVisible = false;
+            dgvComparisonResults.RowHeadersWidth = 51;
+            dgvComparisonResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvComparisonResults.Size = new Size(1085, 247);
+            dgvComparisonResults.TabIndex = 23;
+            // 
+            // colReference
+            // 
+            colReference.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colReference.DataPropertyName = "Reference";
+            colReference.HeaderText = "Reference";
+            colReference.MinimumWidth = 6;
+            colReference.Name = "colReference";
+            colReference.ReadOnly = true;
+            // 
+            // colSide
+            // 
+            colSide.DataPropertyName = "Side";
+            colSide.HeaderText = "Side";
+            colSide.MinimumWidth = 6;
+            colSide.Name = "colSide";
+            colSide.ReadOnly = true;
+            colSide.Width = 80;
+            // 
+            // colDatPart
+            // 
+            colDatPart.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colDatPart.DataPropertyName = "DatPartNumber";
+            colDatPart.HeaderText = "DAT Part Number";
+            colDatPart.MinimumWidth = 6;
+            colDatPart.Name = "colDatPart";
+            colDatPart.ReadOnly = true;
+            // 
+            // colCsvPart
+            // 
+            colCsvPart.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colCsvPart.DataPropertyName = "CsvPartNumber";
+            colCsvPart.HeaderText = "CSV Part Number";
+            colCsvPart.MinimumWidth = 6;
+            colCsvPart.Name = "colCsvPart";
+            colCsvPart.ReadOnly = true;
+            // 
+            // colStatus
+            // 
+            colStatus.DataPropertyName = "Status";
+            colStatus.HeaderText = "Status";
+            colStatus.MinimumWidth = 6;
+            colStatus.Name = "colStatus";
+            colStatus.ReadOnly = true;
+            colStatus.Width = 170;
+            // 
+            // lblResultsSummary
+            // 
+            lblResultsSummary.AutoSize = true;
+            lblResultsSummary.Font = new Font("Consolas", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblResultsSummary.Location = new Point(33, 460);
+            lblResultsSummary.Name = "lblResultsSummary";
+            lblResultsSummary.Size = new Size(423, 20);
+            lblResultsSummary.TabIndex = 24;
+            lblResultsSummary.Text = "Run inspection to generate a detailed report.";
             // 
             // Program_Inspect
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLightLight;
-            ClientSize = new Size(800, 483);
+            ClientSize = new Size(1150, 770);
+            Controls.Add(lblResultsSummary);
+            Controls.Add(dgvComparisonResults);
             Controls.Add(btnInspectFiles);
             Controls.Add(label5);
             Controls.Add(txtbotfile);
@@ -194,9 +276,11 @@
             Controls.Add(label4);
             Controls.Add(label1);
             Controls.Add(pictureBox1);
+            MinimumSize = new Size(1168, 817);
             Name = "Program_Inspect";
             Text = "Program_Inspect";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvComparisonResults).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -216,5 +300,12 @@
         private TextBox txtbotfile;
         private Button btnSelectBot;
         private Button btnInspectFiles;
+        private DataGridView dgvComparisonResults;
+        private DataGridViewTextBoxColumn colReference;
+        private DataGridViewTextBoxColumn colSide;
+        private DataGridViewTextBoxColumn colDatPart;
+        private DataGridViewTextBoxColumn colCsvPart;
+        private DataGridViewTextBoxColumn colStatus;
+        private Label lblResultsSummary;
     }
 }
